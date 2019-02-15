@@ -1,0 +1,42 @@
+main {
+  margin-top: 100px;
+}
+
+.query, .result {
+  display: flex;
+}
+
+.query > button, .result > button {
+  margin-left: 20px;
+}
+
+.copy {
+  padding: 4px 10px 0 10px;
+}
+
+.copy > img {
+  height: 28px;
+}
+
+#error-result {
+  color: red;
+  display: none;
+}
+
+#error-result > pre {
+  font-size: 12px;
+}
+
+#no-results {
+  display: none;
+}
+
+#results {
+  margin-top: 50px;
+  display: none;
+}
+
+.submitting {
+  flex-shrink: 0;
+  padding: 0;
+}
