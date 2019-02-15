@@ -1,33 +1,77 @@
 using System;
-using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
+using GetPodcastLink.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace GetPodcastLink
 {
     public static class GetPodcastLink
     {
+        static HttpClient client = CreateHttpClient();
+
         [FunctionName("GetPodcastLink")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var query = req.Query["query"];
+            if (string.IsNullOrEmpty(query))
+                return new BadRequestObjectResult(new {
+                    message = "Must pass a 'query' parameter",
+                });
 
-            string name = req.Query["name"];
+            Uri queryUrl;
+            try
+            {
+                queryUrl = new Uri(query);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(new {
+                    message = ex.Message,
+                });
+            }
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var lookerUpper = new PodcastLookerUpper(client, log);
+            try
+            {
+                var feedUrls = await lookerUpper.GetFeedUrls(queryUrl, CreateTimeout(TimeSpan.FromSeconds(30)));
 
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
-                : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+                return new OkObjectResult(new {
+                    query = queryUrl,
+                    feedUrls,
+                });
+            }
+            catch (Exception ex)
+            {
+                return new ExceptionResult(ex, includeErrorDetail: true);
+            }
+        }
+       
+        static HttpClient CreateHttpClient()
+        {
+            var handler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+            };
+            var client = new HttpClient(handler);
+            
+            client.DefaultRequestHeaders.Add("User-Agent", "HttpClient");
+            
+            return client;
+        }
+        
+        static CancellationToken CreateTimeout(TimeSpan timeoutDuration)
+        {
+            return new CancellationTokenSource(timeoutDuration).Token;
         }
     }
 }
