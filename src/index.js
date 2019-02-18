@@ -4,6 +4,7 @@ import showLoadingUI from './showLoadingUI';
 import visibilityGroup from './visibilityGroup';
 
 import marx from 'marx-css/css/marx.min.css';
+import ribbon from './ribbon.css';
 import style from './site.css';
 
 for (let button of document.querySelectorAll('button.copy')) {
