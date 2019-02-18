@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Get Podcast Link</title>
+<link href="main.b534de1cb4d722c5278d.css" rel="stylesheet"></head>
+<body>
+  <main>
+    <h1>Get Podcast Link</h1>
+    <p>Look up the feed URL of a podcast from its website.</p>
+    <form>
+      <p class="query">
+        <input type="search" name="query" autofocus required placeholder="Podcast website, iTunes URL, etc." />
+        <button type="submit">Look Up</button>
+      </p>
+    </form>
+
+    <p id="no-results">No results found.</p>
+
+    <div id="error-result">
+      <p>There was an error getting the podcast feed URL.</p>
+      <pre></pre>
+    </div>
+
+    <section id="results">
+      <h3>Results</h3>
+      <p>We think this is the podcast feed URL:</p>
+      <div class="result">
+        <input readonly />
+        <button class="copy"><img alt="copy to clipboard" src="img/copy.svg" /></button>
+      </div>
+    </section>
+  </main>
+
+<script type="text/javascript" src="main.83db055f820f97c54632.js"></script></body>
+</html>
