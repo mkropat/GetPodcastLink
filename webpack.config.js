@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -13,6 +14,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new CopyPlugin([
+      { from: 'img', to: 'img' },
+    ]),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
