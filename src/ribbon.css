@@ -1,12 +1,19 @@
 /* Taken from: https://rgardler.github.io/2015/07/20/adding-github-forkme-in-css-to-jekyll-site */
 
 .ribbon {
-    background-color: #a00;
+    height: 150px;
     overflow: hidden;
-    white-space: nowrap;
     position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.ribbon > div {
+    position: relative;
     right: -50px;
     top: 40px;
+    white-space: nowrap;
+    background-color: #a00;
     -webkit-transform: rotate(45deg);
        -moz-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
@@ -16,9 +23,9 @@
        -moz-box-shadow: 0 0 10px #888;
             box-shadow: 0 0 10px #888;
     text-shadow: 0 0 5px #444;
-  }
+}
   
-  .ribbon a {
+.ribbon a {
     border: 1px solid #faa;
     color: #fff;
     display: block;
@@ -27,4 +34,4 @@
     padding: 10px 50px;
     text-align: center;
     text-decoration: none;
-  }
+}
